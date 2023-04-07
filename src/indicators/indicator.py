@@ -94,3 +94,4 @@ class Indicators:
 if __name__ == "__main__":
     ind = Indicators()
     ind.main_process()
+# AlgorithmicTrading ❯ python src/indicators/indicator.py
