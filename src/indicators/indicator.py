@@ -79,6 +79,112 @@ class Indicators:
         plt.clf()
         return macd_df
 
+    def BBP(self, price_df, window_days=14):
+        price_df = price_df / price_df.iloc[0]
+        std_df = price_df.rolling(window=window_days, min_periods=window_days).std()
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
+        upper_band_df = sma_df + 2.0 * std_df
+        lower_band_df = sma_df - 2.0 * std_df
+        bbp_df = (price_df - lower_band_df) / (upper_band_df - lower_band_df)
+        plt.figure(figsize=(14, 8))
+        plt.plot(upper_band_df, label="upper band", color="red")
+        plt.plot(lower_band_df, label="lower band", color="red")
+        plt.plot(price_df, label="price", color="blue")
+        plt.plot(sma_df, label="SMA", color="green")
+        plt.xlabel("Date")
+        plt.ylabel("Normalized Price")
+        plt.title(f"Upper/ lower Bollinger Bands [ window = {window_days} days ]")
+        plt.legend()
+        plt.grid()
+        plt.savefig(f"./BBwindow{window_days}.png")
+        plt.clf()
+
+        plt.figure(figsize=(14, 8))
+        plt.plot(bbp_df, label="BBP", color="red")
+        plt.xlabel("Date")
+        plt.ylabel("Normalized Price")
+        plt.title(f"Bollinger Bands Percentage (BBP) [ window = {window_days} days ]")
+        plt.legend()
+        plt.grid()
+        plt.axhline(1.0, linestyle="--", linewidth=2)
+        plt.axhline(0.0, linestyle="--", linewidth=2)
+        plt.savefig(f"./BBPwindow{window_days}.png")
+        plt.clf()
+        return bbp_df
+
+    def SMA(self, price_df, window_days=14):
+        price_df = price_df / price_df.iloc[0]
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
+        price_per_sma_df = price_df / sma_df
+        plt.figure(figsize=(14, 8))
+        plt.plot(price_df, label="price")
+        plt.plot(sma_df, label="SMA")
+        plt.plot(price_per_sma_df, label="price/SMA")
+        plt.xlabel("Date")
+        plt.ylabel("Normalized Price")
+        plt.title(
+            f"Price Vs Simple Moving Average(SMA) Vs Price/SMA [ window = {window_days} days ]"
+        )
+        plt.legend()
+        plt.axhline(1.0, linestyle="--", linewidth=2, color="purple")
+        plt.grid()
+        plt.savefig(f"./smawindow{window_days}.png")
+        plt.clf()
+        return sma_df
+
+    def CCI(self, price_df, window_days=14):
+        # std_df = price_df.rolling(window=window_days, min_periods=window_days).std()
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
+        mean_deviation = price_df.rolling(window=window_days).apply(
+            lambda x: pd.Series(x).mad()
+        )
+        cci_df = (price_df - sma_df) / (0.015 * mean_deviation)
+
+        plt.figure(figsize=(14, 8))
+        ax1 = plt.subplot2grid((10, 1), (0, 0), rowspan=5, colspan=1)
+        ax1.plot(price_df, label="price", color="blue")
+        ax1.set_title("share price")
+        ax1.set_xlabel("Date")
+        ax1.set_ylabel("Price")
+        ax1.legend()
+        ax1.grid()
+
+        ax2 = plt.subplot2grid((10, 1), (6, 0), rowspan=4, colspan=1)
+        ax2.plot(cci_df, label="CCI", color="red")
+        ax2.set_title(f"Commodity Channel Index, [ window = {window_days} days ]")
+        ax2.axhline(200, linestyle="--", linewidth=2)
+        ax2.axhline(-150, linestyle="--", linewidth=2)
+        ax2.set_xlabel("Date")
+        ax2.set_ylabel("Price")
+        ax2.legend()
+        ax2.grid()
+
+        plt.savefig(f"./cci{window_days}.png")
+        plt.clf()
+        return cci_df
+
+    def momentum(self, price_df, window_days=14):
+        mtm_df = price_df - price_df.shift(window_days)
+        plt.figure(figsize=(14, 8))
+        ax1 = plt.subplot2grid((10, 1), (0, 0), rowspan=5, colspan=1)
+        ax1.plot(price_df, label="price", color="blue")
+        ax1.set_title("share price")
+        ax1.set_xlabel("Date")
+        ax1.set_ylabel("Price")
+        ax1.legend()
+        ax1.grid()
+
+        ax2 = plt.subplot2grid((10, 1), (6, 0), rowspan=4, colspan=1)
+        ax2.plot(mtm_df, label="Momentum", color="red")
+        ax2.set_title(f"Momentum (Mtm) [ window = {window_days} days ]")
+        ax2.set_xlabel("Date")
+        ax2.set_ylabel("MTM")
+        ax2.legend()
+        ax2.grid()
+
+        plt.savefig(f"./mtm{window_days}.png")
+        plt.clf()
+
     def main_process(self):
         start_date = datetime(2008, 1, 1)
         end_date = datetime(2009, 12, 31)
@@ -89,6 +195,10 @@ class Indicators:
             price_df.drop("SPY", axis=1).fillna(method="ffill").fillna(method="bfill")
         )
         _ = self.MACD(price_df, symbol=shares[0])
+        _ = self.BBP(price_df)
+        _ = self.SMA(price_df)
+        _ = self.CCI(price_df)
+        _ = self.momentum(price_df)
 
 
 if __name__ == "__main__":
