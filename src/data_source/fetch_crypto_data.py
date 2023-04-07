@@ -3,7 +3,7 @@ import pandas as pd
 
 class CryptoDataFetcher(object):
 
-    def __init__(self, coin='bitcoin', vs_currency='usd', days=10, intervel='daily') :
+    def __init__(self, coin='bitcoin', vs_currency='usd', days=10, interval='daily') :
         """Initialze required variables
         """
         self.vs_currency = vs_currency
@@ -11,7 +11,7 @@ class CryptoDataFetcher(object):
         self.params = {
             'vs_currency': vs_currency,
             'days': days,
-            'interval': intervel
+            'interval': interval
         }
 
     def get_response(self):
