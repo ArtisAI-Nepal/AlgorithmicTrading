@@ -7,7 +7,13 @@ data_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..
 class CryptoDataFetcher(object):
 
     def __init__(self, coin='bitcoin', vs_currency='usd', days=10, interval='daily') :
-        """Initialze required variables
+        """Fetches Data for Crypto
+
+        Args:
+            coin (str, optional): name of the coin to fetch data for. Defaults to 'bitcoin'.
+            vs_currency (str, optional): currency we want to see valuation on. Defaults to 'usd'.
+            days (int, optional): how many days ago o data you need. Defaults to 10.
+            interval (str, optional): freqency of data to be fetched. Defaults to 'daily'.
         """
         self.vs_currency = vs_currency
         self.coin = coin
@@ -19,7 +25,10 @@ class CryptoDataFetcher(object):
         }
 
     def get_response(self):
-        """Get response from the API
+        """Makes a get request to get data from API
+
+        Returns:
+            dict: dictionary of data based on the params
         """
         response = requests.get(self.url, params=self.params)
         if response.status_code == 200:
@@ -30,6 +39,11 @@ class CryptoDataFetcher(object):
         return data
 
     def make_dataframe(self):
+        """Makes a dataframe from the data fetched
+
+        Returns:
+            pd.Dataframe: pandas dataframe of the data in flat format
+        """
         data = self.get_response()
         df = pd.DataFrame({
                 'timestamp': [pd.to_datetime(i[0], unit='ms') for i in data['prices']],
@@ -40,8 +54,10 @@ class CryptoDataFetcher(object):
         return df
 
     def create_csv(self):
+        """Make a new csv or appends a new data if already exists
+        """
         df = self.make_dataframe()
-        csv_file = os.path.join(data_folder, self.coin + '.csv')
+        csv_file = os.path.join(data_folder, 'crypto', self.coin + '.csv')
         mode=('a' if os.path.isfile(csv_file) else 'w')
         df.to_csv(
             csv_file,
