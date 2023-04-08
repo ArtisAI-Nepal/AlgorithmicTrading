@@ -8,7 +8,7 @@ data_folder = os.path.join(
 )
 
 
-class CryptoDataFetcher(object):
+class CryptoDataFetcher:
     def __init__(self, coin="bitcoin", vs_currency="usd", days=10, interval="daily"):
         """Fetches Data for Crypto
 
