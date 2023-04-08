@@ -1,4 +1,5 @@
 """data update happens here"""
+from crypto_source import CryptoDataFetcher
 
 class DataFetcher:
     def __init__(self):
@@ -8,7 +9,8 @@ class DataFetcher:
         pass
 
     def fetch_crypto(self):
-        pass
+        instance = CryptoDataFetcher(coin='bitcoin', days='3650')
+        instance.create_csv()
 
     def main_process(self):
         #:TODO: this method will run daily using prefect.
