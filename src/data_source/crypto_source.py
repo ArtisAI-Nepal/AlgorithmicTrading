@@ -7,7 +7,12 @@ import requests
 
 
 class CryptoDataFetcher:
-    def __init__(self, coin="bitcoin", vs_currency="usd", days=10, interval="daily"):
+
+    def __init__(self,
+                 coin="bitcoin",
+                 vs_currency="usd",
+                 days=10,
+                 interval="daily"):
         """Fetches Data for Crypto
 
         Args:
@@ -19,7 +24,11 @@ class CryptoDataFetcher:
         self.vs_currency = vs_currency
         self.coin = coin
         self.url = f"https://api.coingecko.com/api/v3/coins/{coin}/market_chart"
-        self.params = {"vs_currency": vs_currency, "days": days, "interval": interval}
+        self.params = {
+            "vs_currency": vs_currency,
+            "days": days,
+            "interval": interval
+        }
 
     def get_response(self):
         """Makes a get request to get data from API
@@ -42,14 +51,13 @@ class CryptoDataFetcher:
             pd.Dataframe: pandas dataframe of the data in flat format
         """
         data = self.get_response()
-        df = pd.DataFrame(
-            {
-                "timestamp": [pd.to_datetime(i[0], unit="ms") for i in data["prices"]],
-                "prices": [i[1] for i in data["prices"]],
-                "market_caps": [i[1] for i in data["market_caps"]],
-                "total_volumes": [i[1] for i in data["total_volumes"]],
-            }
-        )
+        df = pd.DataFrame({
+            "timestamp":
+            [pd.to_datetime(i[0], unit="ms") for i in data["prices"]],
+            "prices": [i[1] for i in data["prices"]],
+            "market_caps": [i[1] for i in data["market_caps"]],
+            "total_volumes": [i[1] for i in data["total_volumes"]],
+        })
         # df['timestamp'] = df['timestamp'].apply(lambda x: x.timestamp())
         df["timestamp"] = df["timestamp"].dt.date
         # df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S')
@@ -64,7 +72,10 @@ class CryptoDataFetcher:
             self.params["days"] = 1
 
         df = self.make_dataframe()
-        df.to_csv(csv_file, mode=mode, header=not os.path.isfile(csv_file), index=False)
+        df.to_csv(csv_file,
+                  mode=mode,
+                  header=not os.path.isfile(csv_file),
+                  index=False)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import yfinance as yf
 
 
 class StockDataFetcher:
+
     def __init__(self, script: list):
         self.script = script
 
@@ -16,16 +17,15 @@ class StockDataFetcher:
     def initiate_extraction(self, start_date, end_date):
         try:
             data = [
-                self.get_data(
-                    single_script=script, start_date=start_date, end_date=end_date
-                )
-                for script in self.script
+                self.get_data(single_script=script,
+                              start_date=start_date,
+                              end_date=end_date) for script in self.script
             ]
         except Exception as exe:
             print(exe)
-            data = pd.DataFrame(
-                columns=["Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"]
-            )
+            data = pd.DataFrame(columns=[
+                "Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"
+            ])
 
         for i_, single_script in enumerate(self.script):
             prev_data = self.get_pre_data(single_script)
@@ -40,25 +40,23 @@ class StockDataFetcher:
         if os.path.exists(required_file):
             return pd.read_csv(required_file)
         else:
-            return pd.DataFrame(
-                columns=["Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"]
-            )
+            return pd.DataFrame(columns=[
+                "Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"
+            ])
 
 
 if __name__ == "__main__":
-    sdata = StockDataFetcher(
-        script=[
-            "SPY",
-            "AMZN",
-            "TSLA",
-            "AMD",
-            "NVDA",
-            "AAPL",
-            "BAC",
-            "QQQ",
-            "IWM",
-            "MSFT",
-            "NFLX",
-        ]
-    )
+    sdata = StockDataFetcher(script=[
+        "SPY",
+        "AMZN",
+        "TSLA",
+        "AMD",
+        "NVDA",
+        "AAPL",
+        "BAC",
+        "QQQ",
+        "IWM",
+        "MSFT",
+        "NFLX",
+    ])
     sdata.initiate_extraction(start_date="2020-01-01", end_date="2023-04-11")

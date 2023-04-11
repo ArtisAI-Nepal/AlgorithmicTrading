@@ -4,26 +4,26 @@ from src.data_source.stock_source import StockDataFetcher
 
 
 class DataFetcher:
+
     def __init__(self):
         pass
 
     def fetch_stock(self):
-        sdata = StockDataFetcher(
-            script=[
-                "SPY",
-                "AMZN",
-                "TSLA",
-                "AMD",
-                "NVDA",
-                "AAPL",
-                "BAC",
-                "QQQ",
-                "IWM",
-                "MSFT",
-                "NFLX",
-            ]
-        )
-        sdata.initiate_extraction(start_date="2020-01-01", end_date="2023-04-06")
+        sdata = StockDataFetcher(script=[
+            "SPY",
+            "AMZN",
+            "TSLA",
+            "AMD",
+            "NVDA",
+            "AAPL",
+            "BAC",
+            "QQQ",
+            "IWM",
+            "MSFT",
+            "NFLX",
+        ])
+        sdata.initiate_extraction(start_date="2020-01-01",
+                                  end_date="2023-04-06")
 
     def fetch_crypto(self):
         instance = CryptoDataFetcher(coin="bitcoin", days="3650")
