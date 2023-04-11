@@ -6,7 +6,7 @@ __pycache__/
 *.idea
 *.vscode
 *.csv
-
+prefect.db
 
 # C extensions
 *.so

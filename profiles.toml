@@ -1,0 +1,5 @@
+active = "default"
+
+[profiles.default]
+PREFECT_LOCAL_STORAGE_PATH = "/home/shekhar/shekhar/test/AlgorithmicTrading"
+PREFECT_HOME = "/home/shekhar/shekhar/test/AlgorithmicTrading"

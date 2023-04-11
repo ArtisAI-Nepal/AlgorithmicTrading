@@ -1,0 +1,40 @@
+###
+### A complete description of a Prefect Deployment for flow 'fetch-data-flow'
+###
+name: fetch-data
+description: null
+version: efd34300c25f081b66bf8c3567517b83
+# The work queue that will handle this deployment's runs
+work_queue_name: worker-queue
+work_pool_name: worker-pool
+tags: []
+parameters: {}
+schedule: null
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: '/home/shekhar/shekhar/test/AlgorithmicTrading'
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: fetch-data-flow
+manifest_path: null
+storage: null
+path: /home/shekhar/shekhar/test/AlgorithmicTrading
+entrypoint: src/flows/trading_flows.py:fetch_data_flow
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties: {}
+  required: null
+  definitions: null
+timestamp: '2023-04-10T22:23:44.942431+00:00'

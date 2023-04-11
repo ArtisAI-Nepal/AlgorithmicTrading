@@ -16,9 +16,9 @@ repos:
     rev: v0.960
     hooks:
     -   id: mypy
-        # args: [--ignore-missing-imports]
+#        args:  [--ignore-errors=E402]
         types: [python]
-        exclude:  (?x)(^artifacts/ | scripts/pascal_coco.py | flows/custom_flow.py | CutlerConfig/)
+        exclude:  (?x)(^artifacts/ | scripts/pascal_coco.py | src/flow_install.py | CutlerConfig/)
         additional_dependencies: [types-redis, types-requests, types-protobuf, types-cachetools, types-PyYAML,  types-setuptools]
 
 

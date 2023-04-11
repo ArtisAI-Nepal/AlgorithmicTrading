@@ -9,7 +9,7 @@ import pandas as pd
 class Indicators:
     def __init__(self):
         sys.path.append(os.getcwd())
-        self.base_dir = "./src/data"  # fix later with config
+        self.base_dir = "./data"  # fix later with config
         self.colname = "Adj Close"
         pass
 
