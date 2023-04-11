@@ -17,7 +17,6 @@ deployment = Deployment.build_from_flow(
 
 deployment.apply()
 
-
 # if we have to do manually
 """
 prefect config set PREFECT_LOCAL_STORAGE_PATH="/home/shekhar/shekhar/test/AlgorithmicTrading"
