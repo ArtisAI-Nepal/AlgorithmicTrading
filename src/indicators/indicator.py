@@ -16,7 +16,7 @@ class Indicators:
     def symbol_to_path(self, symbol):
         return os.path.join(self.base_dir, f"{str(symbol)}.csv")
 
-    def get_data(self, dates, symbols, addSPY=True):
+    def get_data(self, dates, symbols, addSPY=True, index_col="Date"):
         df = pd.DataFrame(index=dates)
         if addSPY and "SPY" not in symbols:
             symbols = ["SPY"] + list(symbols)
@@ -24,13 +24,14 @@ class Indicators:
         for symbol in symbols:
             df_temp = pd.read_csv(
                 self.symbol_to_path(symbol),
-                index_col="Date",
                 parse_dates=True,
-                usecols=["Date", self.colname],
+                index_col=index_col,
+                usecols=[index_col, self.colname],
                 na_values=["nan"],
             )
             df_temp = df_temp.rename(columns={self.colname: symbol})
             df = df.join(df_temp)
+
             if symbol == "SPY":  # drop dates SPY did not trade
                 df = df.dropna(subset=["SPY"])
         return df

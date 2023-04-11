@@ -50,6 +50,8 @@ services:
     image: prefecthq/prefect:2.10.2-python3.9
     restart: always
     entrypoint: ["prefect", "agent", "start", "--pool", "worker-pool" , "--work-queue", "worker-queue"]
+    volumes:
+      - "/home/shekhar/shekhar/test/AlgorithmicTrading:/home/shekhar/shekhar/test/AlgorithmicTrading"
     environment:
       - PREFECT_API_URL=http://server:4200/api
 #       Use PREFECT_API_KEY if connecting the agent to Prefect Cloud

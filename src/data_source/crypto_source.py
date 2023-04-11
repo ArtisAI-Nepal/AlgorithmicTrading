@@ -51,6 +51,8 @@ class CryptoDataFetcher:
             }
         )
         # df['timestamp'] = df['timestamp'].apply(lambda x: x.timestamp())
+        df["timestamp"] = df["timestamp"].dt.date
+        # df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S')
         return df
 
     def create_csv(self):
@@ -66,5 +68,5 @@ class CryptoDataFetcher:
 
 
 if __name__ == "__main__":
-    instance = CryptoDataFetcher()
+    instance = CryptoDataFetcher(days=3650)
     instance.create_csv()

@@ -28,3 +28,4 @@ prefect config set PREFECT_HOME="/home/shekhar/shekhar/test/AlgorithmicTrading"
 # prefect agent start -p "worker-pool"
 # prefect deployment build -n fetch-data -p worker-pool -q worker-queue src/flows/trading_flows.py:fetch_data_flow
 # prefect deployment apply fetch_data_flow-deployment.yaml
+# prefect deployment ls

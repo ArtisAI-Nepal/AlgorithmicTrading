@@ -31,6 +31,7 @@ class StockDataFetcher:
             prev_data = self.get_pre_data(single_script)
             recent = pd.concat([prev_data, data[i_]])
             output_path = os.path.join(os.getcwd(), "data", "stocks")
+            os.makedirs(output_path, exist_ok=True)
             recent.to_csv(os.path.join(output_path, f"{single_script}.csv"))
 
     def get_pre_data(self, single_script):
