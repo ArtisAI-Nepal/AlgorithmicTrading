@@ -7,7 +7,6 @@ import pandas as pd
 
 
 class Indicators:
-
     def __init__(self):
         sys.path.append(os.getcwd())
         self.base_dir = "./data"  # fix later with config
@@ -59,9 +58,7 @@ class Indicators:
                     )
                     label_status = True
                 else:
-                    ax.bar(histogram.index[i],
-                           histogram[symbol][i],
-                           color="green")
+                    ax.bar(histogram.index[i], histogram[symbol][i], color="green")
             else:
                 if not label_status:
                     ax.bar(
@@ -72,9 +69,7 @@ class Indicators:
                     )
                     label_status = True
                 else:
-                    ax.bar(histogram.index[i],
-                           histogram[symbol][i],
-                           color="red")
+                    ax.bar(histogram.index[i], histogram[symbol][i], color="red")
 
         plt.title("MACD")
         plt.xlabel("Date")
@@ -83,14 +78,12 @@ class Indicators:
         plt.grid()
         plt.savefig("./macd.png")
         plt.clf()
-        return macd_df
+        return macd_df, signal_df
 
     def BBP(self, price_df, window_days=14):
         price_df = price_df / price_df.iloc[0]
-        std_df = price_df.rolling(window=window_days,
-                                  min_periods=window_days).std()
-        sma_df = price_df.rolling(window=window_days,
-                                  min_periods=window_days).mean()
+        std_df = price_df.rolling(window=window_days, min_periods=window_days).std()
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
         upper_band_df = sma_df + 2.0 * std_df
         lower_band_df = sma_df - 2.0 * std_df
         bbp_df = (price_df - lower_band_df) / (upper_band_df - lower_band_df)
@@ -101,8 +94,7 @@ class Indicators:
         plt.plot(sma_df, label="SMA", color="green")
         plt.xlabel("Date")
         plt.ylabel("Normalized Price")
-        plt.title(
-            f"Upper/ lower Bollinger Bands [ window = {window_days} days ]")
+        plt.title(f"Upper/ lower Bollinger Bands [ window = {window_days} days ]")
         plt.legend()
         plt.grid()
         plt.savefig(f"./BBwindow{window_days}.png")
@@ -112,9 +104,7 @@ class Indicators:
         plt.plot(bbp_df, label="BBP", color="red")
         plt.xlabel("Date")
         plt.ylabel("Normalized Price")
-        plt.title(
-            f"Bollinger Bands Percentage (BBP) [ window = {window_days} days ]"
-        )
+        plt.title(f"Bollinger Bands Percentage (BBP) [ window = {window_days} days ]")
         plt.legend()
         plt.grid()
         plt.axhline(1.0, linestyle="--", linewidth=2)
@@ -125,8 +115,7 @@ class Indicators:
 
     def SMA(self, price_df, window_days=14):
         price_df = price_df / price_df.iloc[0]
-        sma_df = price_df.rolling(window=window_days,
-                                  min_periods=window_days).mean()
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
         price_per_sma_df = price_df / sma_df
         plt.figure(figsize=(14, 8))
         plt.plot(price_df, label="price")
@@ -146,10 +135,10 @@ class Indicators:
 
     def CCI(self, price_df, window_days=14):
         # std_df = price_df.rolling(window=window_days, min_periods=window_days).std()
-        sma_df = price_df.rolling(window=window_days,
-                                  min_periods=window_days).mean()
-        mean_deviation = price_df.rolling(
-            window=window_days).apply(lambda x: pd.Series(x).mad())
+        sma_df = price_df.rolling(window=window_days, min_periods=window_days).mean()
+        mean_deviation = price_df.rolling(window=window_days).apply(
+            lambda x: pd.Series(x).mad()
+        )
         cci_df = (price_df - sma_df) / (0.015 * mean_deviation)
 
         plt.figure(figsize=(14, 8))
@@ -163,8 +152,7 @@ class Indicators:
 
         ax2 = plt.subplot2grid((10, 1), (6, 0), rowspan=4, colspan=1)
         ax2.plot(cci_df, label="CCI", color="red")
-        ax2.set_title(
-            f"Commodity Channel Index, [ window = {window_days} days ]")
+        ax2.set_title(f"Commodity Channel Index, [ window = {window_days} days ]")
         ax2.axhline(200, linestyle="--", linewidth=2)
         ax2.axhline(-150, linestyle="--", linewidth=2)
         ax2.set_xlabel("Date")
@@ -204,9 +192,10 @@ class Indicators:
         shares = ["AMZN"]
         dates = pd.date_range(start_date, end_date)
         price_df = self.get_data(symbols=shares, dates=dates)
-        price_df = (price_df.drop(
-            "SPY", axis=1).fillna(method="ffill").fillna(method="bfill"))
-        _ = self.MACD(price_df, symbol=shares[0])
+        price_df = (
+            price_df.drop("SPY", axis=1).fillna(method="ffill").fillna(method="bfill")
+        )
+        _, __ = self.MACD(price_df, symbol=shares[0])
         _ = self.BBP(price_df)
         _ = self.SMA(price_df)
         _ = self.CCI(price_df)

@@ -3,4 +3,4 @@ active = "default"
 [profiles.default]
 PREFECT_LOCAL_STORAGE_PATH = "/home/shekhar/shekhar/test/AlgorithmicTrading"
 PREFECT_HOME = "/home/shekhar/shekhar/test/AlgorithmicTrading"
-PREFECT_API_URL = "http://0.0.0.0:4200/api"
+PREFECT_API_URL = "http://prefect-server.default.svc.cluster.local:4200/api"
