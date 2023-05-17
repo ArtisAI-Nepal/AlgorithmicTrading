@@ -9,6 +9,7 @@ from src.indicators.indicator import Indicators
 
 
 class BackTester:
+
     def __init__(self, data_source_type="crypto", equity="bitcoin"):
         self.initial_balance = 100
         self.initial_date = 0
@@ -24,9 +25,10 @@ class BackTester:
         if self.data_source_type == "crypto":
             self.indicator.colname = "prices"
             self.indicator.base_dir += "/crypto"
-            price_df = self.indicator.get_data(
-                symbols=shares, dates=dates, addSPY=False, index_col="timestamp"
-            )
+            price_df = self.indicator.get_data(symbols=shares,
+                                               dates=dates,
+                                               addSPY=False,
+                                               index_col="timestamp")
         else:
             self.indicator.base_dir += "/stocks"
             self.indicator.colname = "Adj Close"
