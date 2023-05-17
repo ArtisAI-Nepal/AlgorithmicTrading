@@ -53,32 +53,43 @@ class BackTester:
             signal_value = signal_df.loc[date][0]
 
             # Initialize plot
-            fig, (ax1, ax2) = plt.subplots(
-                nrows=2, figsize=(8, 8), gridspec_kw={"height_ratios": [3, 1]}
-            )
-            (price_line,) = ax1.plot(price_df.index, price_df[symbol], label="Price")
+            fig, (ax1,
+                  ax2) = plt.subplots(nrows=2,
+                                      figsize=(8, 8),
+                                      gridspec_kw={"height_ratios": [3, 1]})
+            (price_line, ) = ax1.plot(price_df.index,
+                                      price_df[symbol],
+                                      label="Price")
             fig.suptitle("MACD Indicator", fontsize=16)
             # Set axis labels and legends
             ax1.set_xlabel("Date")
             ax1.set_ylabel("Price")
 
             # Plot MACD line
-            (macd_line,) = ax2.plot(macd_df.index, macd_df[symbol], label="MACD")
+            (macd_line, ) = ax2.plot(macd_df.index,
+                                     macd_df[symbol],
+                                     label="MACD")
 
             # Plot signal line
-            (signal_line,) = ax2.plot(
-                signal_df.index, signal_df[symbol], label="Signal"
-            )
+            (signal_line, ) = ax2.plot(signal_df.index,
+                                       signal_df[symbol],
+                                       label="Signal")
 
             # Add buy and sell annotations for crossovers
             if macd_value > signal_value:
-                ax2.scatter(
-                    date, macd_value, s=100, marker="^", color="green", label="Buy"
-                )
+                ax2.scatter(date,
+                            macd_value,
+                            s=100,
+                            marker="^",
+                            color="green",
+                            label="Buy")
             elif macd_value < signal_value:
-                ax2.scatter(
-                    date, macd_value, s=100, marker="v", color="red", label="Sell"
-                )
+                ax2.scatter(date,
+                            macd_value,
+                            s=100,
+                            marker="v",
+                            color="red",
+                            label="Sell")
 
             ax2.set_xlabel("Date")
             ax2.set_ylabel("MACD Value")
