@@ -9,14 +9,14 @@ import pandas as pd
 class Indicators:
     def __init__(self):
         sys.path.append(os.getcwd())
-        self.base_dir = "./src/data"  # fix later with config
+        self.base_dir = "./data"  # fix later with config
         self.colname = "Adj Close"
         pass
 
     def symbol_to_path(self, symbol):
         return os.path.join(self.base_dir, f"{str(symbol)}.csv")
 
-    def get_data(self, dates, symbols, addSPY=True):
+    def get_data(self, dates, symbols, addSPY=True, index_col="Date"):
         df = pd.DataFrame(index=dates)
         if addSPY and "SPY" not in symbols:
             symbols = ["SPY"] + list(symbols)
@@ -24,13 +24,14 @@ class Indicators:
         for symbol in symbols:
             df_temp = pd.read_csv(
                 self.symbol_to_path(symbol),
-                index_col="Date",
                 parse_dates=True,
-                usecols=["Date", self.colname],
+                index_col=index_col,
+                usecols=[index_col, self.colname],
                 na_values=["nan"],
             )
             df_temp = df_temp.rename(columns={self.colname: symbol})
             df = df.join(df_temp)
+
             if symbol == "SPY":  # drop dates SPY did not trade
                 df = df.dropna(subset=["SPY"])
         return df
@@ -77,7 +78,7 @@ class Indicators:
         plt.grid()
         plt.savefig("./macd.png")
         plt.clf()
-        return macd_df
+        return macd_df, signal_df
 
     def BBP(self, price_df, window_days=14):
         price_df = price_df / price_df.iloc[0]
@@ -194,7 +195,7 @@ class Indicators:
         price_df = (
             price_df.drop("SPY", axis=1).fillna(method="ffill").fillna(method="bfill")
         )
-        _ = self.MACD(price_df, symbol=shares[0])
+        _, __ = self.MACD(price_df, symbol=shares[0])
         _ = self.BBP(price_df)
         _ = self.SMA(price_df)
         _ = self.CCI(price_df)
